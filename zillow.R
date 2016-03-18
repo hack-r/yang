@@ -32,3 +32,29 @@ for(i in 1:nrow(zillow.br_ba_sqft)){
     zillow.br_ba_sqft$V2[i] <- NA
     }
 }
+
+# Remove leading/trailing whitespace
+zillow.br_ba_sqft$V1 <- trim(zillow.br_ba_sqft$V1)
+zillow.br_ba_sqft$V2 <- trim(zillow.br_ba_sqft$V2)
+zillow.br_ba_sqft$V3 <- trim(zillow.br_ba_sqft$V3)
+setnames(zillow.br_ba_sqft, c("br", "ba", "lot_size"))
+
+# Indicate units of lot size
+zillow.br_ba_sqft$lot_size_units <- NA
+for(i in 1:nrow(zillow.br_ba_sqft)){
+  if(grepl("sqft", zillow.br_ba_sqft$lot_size[i])) { zillow.br_ba_sqft$lot_size_units[i] <- "sqft"}
+}
+cat("Apparently units were not an issue for Zillow, but other sites mix in acres")
+
+# Make lot size a number
+zillow.br_ba_sqft$lot_size <- gsub("sqft", "", zillow.br_ba_sqft$lot_size)
+zillow.br_ba_sqft$lot_size <- trim(zillow.br_ba_sqft$lot_size)
+
+# Add clean BR, BA, SQFT back to main data table
+zillow.clean <- cbind(zillow.clean, zillow.br_ba_sqft)
+
+
+# Load into SQL -----------------------------------------------------------
+# For now write to flat file - in the future write directly to SQL DB
+saveRDS(zillow.clean, "zillow.clean.RDS")
+write.csv(zillow.clean, "zillow.clean.csv", row.names = F)
