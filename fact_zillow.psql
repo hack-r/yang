@@ -1,0 +1,6 @@
+CREATE TABLE FACT_zillow 
+(id varchar, source varchar, source1 varchar, 
+result_num varchar, url varchar, address varchar, listing_type varchar,
+price_int varchar, price_formatted varchar, price_currency varchar,
+price_title varchar, price_text varchar, br_ba_sqft varchar, 
+built varchar, br varchar, ba varchar, lot_size varchar, lot_size_units varchar);
