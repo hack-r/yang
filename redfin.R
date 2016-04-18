@@ -1,5 +1,5 @@
 # Options -----------------------------------------------------------------
-setwd("C://users//jmiller//Desktop")
+setwd("C://users//jmiller//Desktop//yang")
 
 # Functions and Libraries -------------------------------------------------
 pacman::p_load(data.table, rvest, stringi, sqldf, XML)
@@ -8,4 +8,4 @@ pacman::p_load(data.table, rvest, stringi, sqldf, XML)
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 # Extract -----------------------------------------------------------------
-zillow.raw <- fread("zillow.csv")
+rf90210 <- fread("redfin_90210.csv")
