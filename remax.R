@@ -26,6 +26,8 @@ remax.clean$sq_ft[2]  <- remax.clean$sq_ft[2]*43560
 
 # Create cap rate column
 remax.clean$cap_rate  <- str_extract_all(remax.clean$STATS_CONTENTS, "[0-9.]+%")
+remax.clean$cap_rate[remax.clean$cap_rate =="character(0)"] <- NA
+remax.clean$cap_rate <- as.character(remax.clean$cap_rate)
 
 # Delete unneeded columns
 remax.clean$STATS_LINK        <- NULL
@@ -33,8 +35,8 @@ remax.clean$DESCRIPTION_VALUE <- NULL
 remax.clean$SHOWONMAP_LABEL   <- NULL
 remax.clean$STATS_IMAGE       <- NULL
 remax.clean$BLOCK_IMAGE       <- NULL
-remax.clean$`BLOCK_IMAGE/_source` <- NULL
-remax.clean$SNAPSHOT_LABEL    <- NULL
+remax.clean$`BLOCK_IMAGE/_source`      <- NULL
+remax.clean$SNAPSHOT_LABEL             <- NULL
 remax.clean$`SHOWONMAP_NUMBER/_source` <- NULL
 remax.clean$`STATS_LINK/_text` <- NULL
 remax.clean$`TD_IMAGE/_source` <- NULL
@@ -42,12 +44,12 @@ remax.clean$`STATS_IMAGE/_source` <- NULL
 remax.clean$`STATS_IMAGE/_alt`    <- NULL
 remax.clean$`BLOCK_IMAGE/_alt`    <- NULL
 remax.clean$SHOWONMAP_NUMBER      <- NULL
-remax.clean$TD_IMAGE  <- NULL
+remax.clean$TD_IMAGE     <- NULL
 remax.clean$DESCRIPTION  <- NULL
+remax.clean$sq_ft_raw    <- NULL
 
 # Clean city/state
 remax.clean$city_state <- gsub(", CA Snapshot", "",remax.clean$city_state)
 
 # Load into Postgres ------------------------------------------------------
-mode(remax.clean) <- "complex"
 write.csv(remax.clean, file = "remax_clean.csv", row.names = F)

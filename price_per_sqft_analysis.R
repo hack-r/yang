@@ -3,7 +3,7 @@
 setwd("C://users//jmiller//Desktop//yang")
 
 # Functions and Libraries -------------------------------------------------
-pacman::p_load(data.table, RDSTK, rvest, stringi, sqldf, XML, zipcode)
+pacman::p_load(data.table, RDSTK, rvest, stringi, sqldf, XML, zipcode, zoo)
 
 # Data --------------------------------------------------------------------
 zs  <- readRDS("zs.RDS")
@@ -71,6 +71,16 @@ zsdf <- as.data.frame(zs)
 res  <- zsdf[c("sold_price", "sold_date", "sqft", "zip","price_per_sqft")]
 
 com <- mls.zip[c("sold_price", "sold_date","Sqft", "zip", "price_per_sqft")]
+
+colnames(com) <- colnames(res)
+
+# Data Types
+res$sold_date <- as.Date(strptime(as.character(res$sold_date),"%d/%m/%y %H:%S",tz="UTC"))
+
+res$sold_price <- as.numeric(res$sold_price)
+res$sold_date  <- as.Date(res$sold_date)
+
+
 
 # Analysis ----------------------------------------------------------------
 cor.test(zs$price_per_sqft)
