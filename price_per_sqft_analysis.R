@@ -3,86 +3,110 @@
 setwd("C://users//jmiller//Desktop//yang")
 
 # Functions and Libraries -------------------------------------------------
-pacman::p_load(data.table, RDSTK, rvest, stringi, sqldf, XML, zipcode, zoo)
+pacman::p_load(data.table, RDSTK, RgoogleMaps, rvest, stringi, sqldf, XML, zipcode, zoo)
 
 # Data --------------------------------------------------------------------
 zs  <- readRDS("zs.RDS")
-mls <- fread("yang_crmls.csv") 
+mls <- fread("yang_crmls2.csv") 
 
-data("zipcode")
-zip     <- zipcode[zipcode$state == "CA",]
+mls$City[mls$City ==	"ALH"] <- "ALHAMBRA"		
+mls$City[mls$City ==	"ART"] <- "ARTESIA"		
+mls$City[mls$City ==	"BBK"] <- "BURBANK"		
+mls$City[mls$City ==	"BDPK"] <- "BERMUDA DUNES"		
+mls$City[mls$City ==	"BELL"] <- "BELL"		
+mls$City[mls$City ==	"BF"] <- "BELLFLOWER"		
+mls$City[mls$City ==	"BG"] <- "BELL GARDENS"		
+mls$City[mls$City ==	"CARS"] <- "CARSON"		
+mls$City[mls$City ==	"CMP"] <- "COMPTON"		
+mls$City[mls$City ==	"COI"] <- "CITY OF INDUSTRY"		
+mls$City[mls$City ==	"COM"] <- "COMMERCE"		
+mls$City[mls$City ==	"CUD"] <- "CUDAHY"		
+mls$City[mls$City ==	"DOW"] <- "DOWNEY"		
+mls$City[mls$City ==	"ELM"] <- "EL MONTE"		
+mls$City[mls$City ==	"GD"] <- "GLENDALE"		
+mls$City[mls$City ==	"HAWT"] <- "HAWTHORNE"		
+mls$City[mls$City ==	"HDPK"] <- "HIGHLAND PARK"	
+mls$City[mls$City ==	"HG"] <- "HAWAIIAN GARDENS"		
+mls$City[mls$City ==	"HMB"] <- "HERMOSA BEACH "		
+mls$City[mls$City ==	"HNPK"] <- "HUNTINGTON PARK"		
+mls$City[mls$City ==	"ING"] <- "INGLEWOOD"		
+mls$City[mls$City ==	"LA"] <- "Los Angeles"		
+mls$City[mls$City ==	"LAM"] <- "LA MIRADA"		
+mls$City[mls$City ==	"LNWD"] <- "LYNWOOD"		
+mls$City[mls$City ==	"LONG"] <- "Long Beach"		
+mls$City[mls$City ==	"LW"] <- "LAKEWOOD"		
+mls$City[mls$City ==	"MP"] <- "MONTEREY PARK"		
+mls$City[mls$City ==	"MTB"] <- "MONTEBELLO"		
+mls$City[mls$City ==	"MW"] <- "MAYWOOD"		
+mls$City[mls$City ==	"NWK"] <- "NORWALK"		
+mls$City[mls$City ==	"OA"] <- "unknown"		
+mls$City[mls$City ==	"PAR"] <- "PARAMOUNT"		
+mls$City[mls$City ==	"POM"] <- "POMONA "		
+mls$City[mls$City ==	"PR"] <- "PICO RIVERA"		
+mls$City[mls$City ==	"REDO"] <- "REDONDO BEACH"		
+mls$City[mls$City ==	"SF"] <- "SAN FERNANDO"		
+mls$City[mls$City ==	"SFS"] <- "SANTA FE SPRINGS"		
+mls$City[mls$City ==	"SIGH"] <- "SIGNAL HILL"		
+mls$City[mls$City ==	"SM"] <- "SAN MARINO"		
+mls$City[mls$City ==	"SOG"] <- "SOUTH GATE"		
+mls$City[mls$City ==	"SP"] <- "san pedro"		
+mls$City[mls$City ==	"TORR"] <- "torrance"		
+mls$City[mls$City ==	"WCOV"] <- "west covina"		
+mls$City[mls$City ==	"WH"] <- "WHITTIER"		
+mls$City[mls$City ==	"WILM"] <- "WILMINGTON"		
 
-mls$city_code <- mls$City
-mls$City      <- NULL
+mls$City[mls$City == "WS"]   <- "WESTCHESTER"
+mls$City[mls$City == "WHO"]  <- "unknown"
+mls$City[mls$City == "WEH"]  <-  "unknown"
+mls$City[mls$City == "WAL"]  <- "WALNUT"
+mls$City[mls$City == "VEN"]  <- "VERNON" # maybe?
+mls$City[mls$City == "TUJ"]  <- "TUJUNGA"
+mls$City[mls$City == "TMPL"] <- "TEMPLE CITY"
+mls$City[mls$City == "SVL"]  <- "SKY VALLEY"
+mls$City[mls$City == "SUNL"] <- "SUNLAND"
+mls$City[mls$City == "SPAS"] <- "SOUTH PASADENA"
+mls$City[mls$City == "SMRO"] <- "SAN MARINO"
+mls$City[mls$City == "SCL"]  <- "SAN CLEMENTE"
+mls$City[mls$City == "SDMS"] <- "SAN DEIGO"
+mls$City[mls$City == "PDL"]  <- "PALMDALE"
+mls$City[mls$City == "PBLM"] <- "unknown"
+mls$City[mls$City == "ROW"]  <- "ROWLAND HEIGHTS"
+mls$City[mls$City == "RLT"]  <- "RIALTO"
+mls$City[mls$City == "SCL"]  <- "SAN CLEMENTE" #maybe?
+mls$City[mls$City == "PAS"]  <- "PASADENA"
+mls$City[mls$City == "SGAB"] <- "SAN GABRIEL"
+mls$City[mls$City == "UNIC"] <- "unknown"
+mls$City[mls$City == "LX"]   <- "LENNOX"
+mls$City[mls$City == "GLDR"] <- "GLENDORA"
+mls$City[mls$City == "ESER"] <- "unknown" 
+mls$City[mls$City == "ES"]   <- "EL SEGUNDO"
+mls$City[mls$City == "LNCR"] <- "LANCASTER"
+mls$City[mls$City == "LVRN"] <- "LA VERNE"
+mls$City[mls$City == "MR"]   <- "MARINA DEL REY"
+mls$City[mls$City == "MNRO"] <- "MONROVIA"
+mls$City[mls$City == "LOM"]  <- "LOMITA"
+mls$City[mls$City == "NHLW"] <- "NORTH HOLLYWOOD"
+mls$City[mls$City == "HH"]   <-  "HACIENDA HEIGHTS"
+mls$City[mls$City == "DUAR"] <- "DUARTE"
+mls$City[mls$City == "CULV"] <- "CULVER CITY"
+mls$City[mls$City == "ARCD"] <- "unknown"
+mls$City[mls$City == "AZU"]  <- "AZUSA"
+  
+  
+mls$City <- tolower(mls$City)
 
-mls$city_code <- gsub("LONG","Long Beach",mls$city_code)
-mls$city_code <- gsub("LA","Los Angeles",mls$city_code)
-mls$city_code <- gsub("ALH","ALHAMBRA",mls$city_code)
-mls$city_code <- gsub("ART","ARTESIA",mls$city_code)
-mls$city_code <- gsub("BBK","BURBANK",mls$city_code)
-mls$city_code <- gsub("BDPK","BERMUDA DUNES",mls$city_code)
-mls$city_code <- gsub("BELL","BELL",mls$city_code)
-mls$city_code <- gsub("BF","BELLFLOWER",mls$city_code)
-mls$city_code <- gsub("BG","BELL GARDENS",mls$city_code)
-mls$city_code <- gsub("CARS","CARSON",mls$city_code)
-mls$city_code[mls$city_code == "CMP"] <- gsub("CMP","COMPTON",mls$city_code[mls$city_code == "CMP"])
-mls$city_code <- gsub("COI","CITY OF INDUSTRY",mls$city_code)
-mls$city_code <- gsub("COM","COMMERCE",mls$city_code)
-mls$city_code <- gsub("CUD","CUDAHY",mls$city_code)
-mls$city_code <- gsub("DOW","DOWNEY",mls$city_code)
-mls$city_code <- gsub("ELM","EL MONTE",mls$city_code)
-mls$city_code <- gsub("GD","GLENDALE",mls$city_code)
-mls$city_code <- gsub("HAWT","HAWTHORNE",mls$city_code)
-mls$city_code[mls$city_code == "HDPK"] <- gsub("HDPK","HIGHLAND PARK",mls$city_code[mls$city_code == "HDPK"])
-mls$city_code <- gsub("HG","HAWAIIAN GARDENS",mls$city_code)
-mls$city_code <- gsub("HMB","HERMOSA BEACH ",mls$city_code)
-mls$city_code[mls$city_code == "HNPK"] <- gsub("HNPK","HUNTINGTON PARK",mls$city_code[mls$city_code == "HNPK"])
-mls$city_code[mls$city_code == "ING"] <- gsub("ING","INGLEWOOD",mls$city_code[mls$city_code == "ING"])
-mls$city_code <- gsub("LAM","LA MIRADA",mls$city_code)
-mls$city_code <- gsub("LNWD","LYNWOOD",mls$city_code)
-mls$city_code <- gsub("LW","LAKEWOOD",mls$city_code)
-mls$city_code <- gsub("MP","MONTEREY PARK",mls$city_code)
-mls$city_code <- gsub("MTB","MONTEBELLO",mls$city_code)
-mls$city_code <- gsub("MW","MAYWOOD",mls$city_code)
-mls$city_code <- gsub("NWK","NORWALK",mls$city_code)
-mls$city_code <- gsub("OA","unknown",mls$city_code)
-mls$city_code <- gsub("PAR","PARAMOUNT",mls$city_code)
-mls$city_code <- gsub("POM","POMONA ",mls$city_code)
-mls$city_code <- gsub("PR","PICO RIVERA",mls$city_code)
-mls$city_code <- gsub("REDO","REDONDO BEACH",mls$city_code)
-mls$city_code[mls$city_code == "SF"]  <- gsub("SF","SAN FERNANDO",mls$city_code[mls$city_code == "SF"])
-mls$city_code[mls$city_code == "SFS"] <- gsub("SFS","SANTA FE SPRINGS",mls$city_code[mls$city_code == "SFS"])
-mls$city_code <- gsub("SIGH","SIGNAL HILL",mls$city_code)
-mls$city_code <- gsub("SM","SAN MARINO",mls$city_code)
-mls$city_code <- gsub("SOG","SOUTH GATE",mls$city_code)
-mls$city_code <- gsub("SP","san pedro",mls$city_code)
-mls$city_code <- gsub("TORR","torrance",mls$city_code)
-mls$city_code <- gsub("WCOV","west covina",mls$city_code)
-mls$city_code <- gsub("WH","WHITTIER",mls$city_code)
-mls$city_code <- gsub("WILM","WILMINGTON",mls$city_code)
-
-mls$city <- tolower(mls$city_code)
-#mls$city_code <- NULL
-
-zip$city <- tolower(zip$city)
-zip <- zip[!duplicated(zip$city),]
-
-mls.zip <- sqldf("select a.*, b.zip from 'mls' a left join zip b on a.city = b.city")
-table(mls.zip$zip, useNA = "always")
-
-mls.zip$price_per_sqft <- mls.zip$sold_price/mls.zip$Sqft
-
-mls.zip$zip[mls.zip$zip == "unknown"] <- "91304" # manual lookup
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "huntington paramountk"] <- "90255"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "commercepton"]          <- "90221"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "cudahy"]                <- "90201"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "los angelesm"]          <- "90638"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "santa fe san pedrorings"] <- "90670"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "signal hill"] <- "90755"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "highland paramountk"] <- "90043"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "pomona "] <- "91766"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city_code == "COMMERCE"]<- "90040"
-mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city_code == "BERMUDA DUNES"]<- "91706"
+write.csv(mls, "mls_cities.csv", row.names = F)
+# mls.zip$zip[mls.zip$zip == "unknown"] <- "91304" # manual lookup
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "huntington paramountk"] <- "90255"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "commercepton"]          <- "90221"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "cudahy"]                <- "90201"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "los angelesm"]          <- "90638"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "santa fe san pedrorings"] <- "90670"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "signal hill"] <- "90755"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "highland paramountk"] <- "90043"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city == "pomona "] <- "91766"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city_code == "COMMERCE"]<- "90040"
+# mls.zip$zip[is.na(mls.zip$zip) & mls.zip$city_code == "BERMUDA DUNES"]<- "91706"
 
 # Final residential data set
 zsdf <- as.data.frame(zs)
@@ -154,4 +178,5 @@ price.mod <- glm(sold_price ~ ., data = res_com)
 summary(ppsf.mod)
 summary(price.mod) # shows comm vs residential is highly insignificant controlling for other factors
 
+# Data Visualization ------------------------------------------------------
 
